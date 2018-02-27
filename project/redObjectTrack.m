@@ -13,7 +13,7 @@ vid.FrameGrabInterval = 5;
 
 %start the video aquisition here
 start(vid)
-
+drawObj = [];
 % Set a loop that stop after 100 frames of aquisition
 while(vid.FramesAcquired<=200)
     
@@ -23,7 +23,7 @@ while(vid.FramesAcquired<=200)
     % Now to track red objects in real time
     % we have to subtract the red component 
     % from the grayscale image to extract the red components in the image.
-    diff_im = imsubtract(data(:,:,1), rgb2gray(data));
+    diff_im = imsubtract(data(:,:,3), rgb2gray(data));
     %Use a median filter to filter out noise
     %each pixel became the median value in a 3-by-3 neighborhood 
     diff_im = medfilt2(diff_im, [3 3]);
@@ -40,6 +40,13 @@ while(vid.FramesAcquired<=200)
     % Here we do the image blob analysis.
     % We get a set of properties for each labeled region.
     stats = regionprops(bw, 'BoundingBox', 'Centroid');
+    if(length(drawObj) >2)
+        for i=1:length(drawObj)
+            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,1) = 120; %a la capa roja en el pixel 30 al 30+20 X y 90 al 20 Y asignele 120
+            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,2) = 152; %a la capa verde en el pixel 30 al 30+20 X y 90 al 20 Y asignele 152
+            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,3) = 0;
+        end
+    end
     
     % Display the image
     imshow(data)
@@ -50,6 +57,9 @@ while(vid.FramesAcquired<=200)
     for object = 1:length(stats)
         bb = stats(object).BoundingBox;
         bc = stats(object).Centroid;
+        drawObj = [drawObj;[bc(2),bc(1)]];
+        
+        
         rectangle('Position',bb,'EdgeColor','r','LineWidth',2)
         plot(bc(1),bc(2), '-m+')
         a=text(bc(1)+15,bc(2), strcat('X: ', num2str(round(bc(1))), '    Y: ', num2str(round(bc(2)))));
@@ -67,5 +77,5 @@ stop(vid);
 flushdata(vid);
 
 % Clear all variables
-clear all
+%clear all
 sprintf('%s','That was all about Image tracking, Guess that was pretty easy :) ')
