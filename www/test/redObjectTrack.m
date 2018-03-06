@@ -1,3 +1,5 @@
+function html=cameraDraw(headers,config)
+global startDraw
 a = imaqhwinfo;
 [camera_name, camera_id, format] = getCameraInfo(a);
 
@@ -42,28 +44,30 @@ while(vid.FramesAcquired<=200)
     stats = regionprops(bw, 'BoundingBox', 'Centroid');
     if(length(drawObj) >2)
         for i=1:length(drawObj)
-            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,1) = 120; %a la capa roja en el pixel 30 al 30+20 X y 90 al 20 Y asignele 120
-            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,2) = 152; %a la capa verde en el pixel 30 al 30+20 X y 90 al 20 Y asignele 152
-            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,3) = 0;
+            data(uint8(drawObj(i,1)):uint8(drawObj(i,1)+20),uint8(drawObj(i,2)):uint8(drawObj(i,2)+20),1) = 120; %a la capa roja en el pixel 30 al 30+20 X y 90 al 20 Y asignele 120
+            data(uint8(drawObj(i,1)):uint8(drawObj(i,1)+20),uint8(drawObj(i,2)):uint8(drawObj(i,2)+20),2) = 152; %a la capa verde en el pixel 30 al 30+20 X y 90 al 20 Y asignele 152
+            data(uint8(drawObj(i,1)):uint8(drawObj(i,1)+20),uint8(drawObj(i,2)):uint8(drawObj(i,2)+20),3) = 0;
         end
     end
     
     % Display the image
-    imshow(data)
+    figure(2);
+    imshow(data);
     
     hold on
-    
-    %This is a loop to bound the red objects in a rectangular box.
-    for object = 1:length(stats)
-        bb = stats(object).BoundingBox;
-        bc = stats(object).Centroid;
-        drawObj = [drawObj;[bc(2),bc(1)]];
-        
-        
-        rectangle('Position',bb,'EdgeColor','r','LineWidth',2)
-        plot(bc(1),bc(2), '-m+')
-        a=text(bc(1)+15,bc(2), strcat('X: ', num2str(round(bc(1))), '    Y: ', num2str(round(bc(2)))));
-        set(a, 'FontName', 'Arial', 'FontWeight', 'bold', 'FontSize', 12, 'Color', 'yellow');
+    if startDraw == 1
+        %This is a loop to bound the red objects in a rectangular box.
+        for object = 1:length(stats)
+            bb = stats(object).BoundingBox;
+            bc = stats(object).Centroid;
+            drawObj = [drawObj;[bc(2),bc(1)]];
+
+
+            rectangle('Position',bb,'EdgeColor','r','LineWidth',2)
+            plot(bc(1),bc(2), '-m+')
+            a=text(bc(1)+15,bc(2), strcat('X: ', num2str(round(bc(1))), '    Y: ', num2str(round(bc(2)))));
+            set(a, 'FontName', 'Arial', 'FontWeight', 'bold', 'FontSize', 12, 'Color', 'yellow');
+        end
     end
     
     hold off
@@ -78,4 +82,5 @@ flushdata(vid);
 
 % Clear all variables
 %clear all
-sprintf('%s','That was all about Image tracking, Guess that was pretty easy :) ')
+sprintf('%s','That was all about Image tracking, Guess that was pretty easy :) ');
+html = 'ok';
