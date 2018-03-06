@@ -4,6 +4,9 @@
 %    solutions{i}=funcs{i}();
 %end
 % global startDraw
+fid = fopen('startDraw.txt','wt');
+fprintf(fid, '0');
+fclose(fid);
 j = batch('webserver');
 redObjectTrack();
 delete(j)
