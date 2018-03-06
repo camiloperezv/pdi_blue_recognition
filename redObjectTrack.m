@@ -1,4 +1,4 @@
-function r = cameraDraw()
+% function r = cameraDraw()
 global startDraw
 %job = batch('webserver');
 %wait(job);
@@ -50,9 +50,9 @@ while(vid.FramesAcquired<=600)
     stats = regionprops(bw, 'BoundingBox', 'Centroid');
     if(length(drawObj) >2)
         for i=1:length(drawObj)
-            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,1) = 120; %a la capa roja en el pixel 30 al 30+20 X y 90 al 20 Y asignele 120
-            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,2) = 152; %a la capa verde en el pixel 30 al 30+20 X y 90 al 20 Y asignele 152
-            data(drawObj(i,1):drawObj(i,1)+20,drawObj(i,2):drawObj(i,2)+20,3) = 0;
+            data(round(drawObj(i,1)):round(drawObj(i,1)+20),round(drawObj(i,2)):round(drawObj(i,2)+20),1) = 120; %a la capa roja en el pixel 30 al 30+20 X y 90 al 20 Y asignele 120
+            data(round(drawObj(i,1)):round(drawObj(i,1)+20),round(drawObj(i,2)):round(drawObj(i,2)+20),2) = 152; %a la capa verde en el pixel 30 al 30+20 X y 90 al 20 Y asignele 152
+            data(round(drawObj(i,1)):round(drawObj(i,1)+20),round(drawObj(i,2)):round(drawObj(i,2)+20),3) = 0;
         end
     end
     
