@@ -12,13 +12,13 @@ vid = videoinput(camera_name, camera_id, format);
 set(vid, 'FramesPerTrigger', Inf);
 set(vid, 'ReturnedColorspace', 'rgb')
 %Se usan 2 fotogramas de intervalo
-vid.FrameGrabInterval = 2;
+vid.FrameGrabInterval = 4;
 
 %Empieza la adquisicion de video
 start(vid)
 %inicia el arreglo de dibujo
 drawObj = [];
-% While para capturar 600 fotogramas
+% While para capturar 400 fotogramas
 while(vid.FramesAcquired<=600)
     
     % Obtiene un fotograma y reescala la imagen al 60%
